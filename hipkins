@@ -1,0 +1,30 @@
+#!/bin/sh
+# Hipkins - Jenkins to Hipchat notification script
+#
+# Call thusly: hipkins $? <Room> <Hipchat API Token>
+# Must immediately follow the rake command
+#
+# Copyright (c) 2011 Oozou
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+# following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+API="https://api.hipchat.com/v1/rooms/message?format=json&auth_token=$3"
+BUILD="<a href=\"${BUILD_URL}console\">build $BUILD_NUMBER</a>"
+
+if [ $1 == 0 ]; then
+  curl -d "notify=0&color=green&room_id=$2&from=Jenkins&message=w00t, $JOB_NAME $BUILD passes with flying colours!" $API
+else
+  curl -d "notify=1&color=red&room_id=$2&from=Jenkins&message=Ahoy! $JOB_NAME $BUILD is failing spectacularly, shame on you!" $API
+fi
+
+return $1
