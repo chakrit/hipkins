@@ -27,4 +27,4 @@ else
   curl -d "notify=1&color=red&room_id=$2&from=Jenkins&message=Ahoy! $JOB_NAME $BUILD is failing spectacularly, shame on you!" $API
 fi
 
-return $1
+exit $1
