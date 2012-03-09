@@ -20,11 +20,12 @@
 
 API="https://api.hipchat.com/v1/rooms/message?format=json&auth_token=$3"
 BUILD="<a href=\"${BUILD_URL}console\">build $BUILD_NUMBER</a>"
+COMMITTER="$(git log $GIT_COMMIT --format="%ce" -1 | grep -Po ".+(?=\@)")"
 
 if [ $1 == 0 ]; then
   curl -d "notify=0&color=green&room_id=$2&from=Jenkins&message=w00t, $JOB_NAME $BUILD passes with flying colours!" $API
 else
-  curl -d "notify=1&color=red&room_id=$2&from=Jenkins&message=Ahoy! $JOB_NAME $BUILD is failing spectacularly, shame on you!" $API
+  curl -d "notify=1&color=red&room_id=$2&from=Jenkins&message=Ahoy! $JOB_NAME $BUILD (@$COMMITTER) is failing spectacularly, shame on you!" $API
 fi
 
 exit $1
